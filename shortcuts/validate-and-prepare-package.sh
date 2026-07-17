@@ -35,12 +35,19 @@ log_file="${source_dir}/${source_name}.llm-package.log"
 } >>"$log_file"
 
 cd "$validator_dir" || exit 1
-"$uv_bin" run validate-ttml \
+if "$uv_bin" run validate-ttml \
   -ttml_in "$source_file" \
   -results_out "$validation_file" \
   -vertical \
   -json >>"$log_file" 2>&1
-validator_status=$?
+then
+  validator_status=0
+else
+  # A non-zero status is expected when the document has findings. Continue
+  # whenever the validator still produced a usable JSON result.
+  validator_status=$?
+  printf 'Validator exit status: %s\n' "$validator_status" >>"$log_file"
+fi
 
 if [[ ! -s "$validation_file" ]]; then
   printf 'ERROR: Validator did not create a non-empty JSON file.\n' >>"$log_file"
