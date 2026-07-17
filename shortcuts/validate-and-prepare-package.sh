@@ -25,17 +25,27 @@ source_dir="$(dirname "$source_file")"
 source_name="$(basename "$source_file")"
 validation_file="${source_dir}/${source_name}.validation.json"
 package_file="${source_dir}/${source_name}.llm-package.json"
+log_file="${source_dir}/${source_name}.llm-package.log"
+
+{
+  printf '\n=== TTML validation/package run: %s ===\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+  printf 'Source: %s\n' "$source_file"
+  printf 'Validation output: %s\n' "$validation_file"
+  printf 'Package output: %s\n' "$package_file"
+} >>"$log_file"
 
 cd "$validator_dir" || exit 1
 "$uv_bin" run validate-ttml \
   -ttml_in "$source_file" \
   -results_out "$validation_file" \
   -vertical \
-  -json >/dev/null 2>&1
+  -json >>"$log_file" 2>&1
 validator_status=$?
 
 if [[ ! -s "$validation_file" ]]; then
-  notify "Validator did not create ${source_name}.validation.json"
+  printf 'ERROR: Validator did not create a non-empty JSON file.\n' >>"$log_file"
+  notify "Validator failed; ${source_name}.llm-package.log contains details"
+  /usr/bin/open -R "$log_file"
   exit 1
 fi
 
@@ -43,10 +53,14 @@ cd "$helper_dir" || exit 1
 if ! ./scripts/prepare-package.sh \
   --ttml "$source_file" \
   --validator "$validation_file" \
-  --output "$package_file" >/dev/null; then
-  notify "Validation succeeded, but the LLM package could not be created"
+  --output "$package_file" >>"$log_file" 2>&1; then
+  printf 'ERROR: LLM package preparation failed.\n' >>"$log_file"
+  notify "Package failed; ${source_name}.llm-package.log contains details"
+  /usr/bin/open -R "$log_file"
   exit 1
 fi
+
+printf 'SUCCESS: LLM package created.\n' >>"$log_file"
 
 if [[ $validator_status -ne 0 ]]; then
   notify "${source_name}: validator returned findings; JSON and LLM package created"
