@@ -12,6 +12,9 @@ Analyse only the supplied actionable finding groups. Group related causes into
 practical recipes, use contextual source TTML, and select only supplied BBC
 guidance IDs. Write for subtitle practitioners. Do not recreate validator data.
 Every actionable group ID must appear exactly once across the recipes.
+Treat errors as delivery-blocking and materially more urgent than warnings.
+Prioritise error remediation before warning review. Do not describe warnings as
+equivalent to errors or imply that a warning alone is a formal validation failure.
 Proposed markup must preserve unrelated content and must be labelled through
 the structured fields, not prose caveats."""
 
