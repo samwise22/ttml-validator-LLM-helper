@@ -6,7 +6,9 @@ Only records with status `verified` may be cited by generated reports. Verificat
 
 | ID | Status | Title | URL | Verified on | Permitted use |
 |---|---|---|---|---|---|
-| BBC-SUBTITLES-ROOT | pending | BBC subtitle guidance | https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/ | — | Discovery only; not yet eligible for report citation |
+| BBC-SUBTITLES-V1.2.5 | verified | BBC Subtitle Guidelines | https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/ | 2026-07-17 | Root source for the curated deep links in `BBC-SUBTITLE-GUIDANCE.md` |
+
+Verification was performed against a browser-saved HTML copy supplied by the repository owner. The saved document identifies itself as `BBC Subtitle Guidelines_v1.2.5`, records the canonical BBC URL, and contains the rendered headings, section identifiers, text, and exact self-links. Live reachability was not independently verified because automated access was blocked by the publisher's `robots.txt` policy.
 
 ## Adding a source
 

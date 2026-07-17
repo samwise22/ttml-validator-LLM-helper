@@ -31,7 +31,7 @@ The build is deterministic and uses only standard shell tools. `DIST.md` is gene
 
 ## Project status
 
-This first foundation defines the trust boundary, reporting contract, template, and knowledge-source governance. Parser-specific examples, a larger verified BBC guidance subset, conformance fixtures, and automated HTML checks remain future work.
+This foundation defines the trust boundary, reporting contract, template, knowledge-source governance, and a curated BBC guidance-routing map. Parser-specific examples, conformance fixtures, and automated HTML checks remain future work.
 
 ## Licence and source material
 

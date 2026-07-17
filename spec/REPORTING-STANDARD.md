@@ -40,6 +40,8 @@ Each detailed finding **shall** contain:
 4. a corrected example when the evidence supports one, otherwise an explicit statement that no safe correction is proposed; and
 5. applicable guidance links selected only from verified repository records.
 
+Applicable guidance **shall** be selected using the routing rules in `knowledge/BBC-SUBTITLE-GUIDANCE.md` and inserted within the related finding. A report **shall not** reproduce the whole guidance catalogue.
+
 Likely causes and fixes **shall** be labelled as analysis, not validator output. The generator **shall not** present a correction as validated unless a validator actually verified it.
 
 Corrected XML snippets **shall** be well-formed in their shown context. Ellipses or omitted context **shall** be visibly marked. The generator **should** make the smallest relevant change and **shall not** silently change unrelated content, timing, styling, identifiers, or language.
