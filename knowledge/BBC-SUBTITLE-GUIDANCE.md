@@ -4,6 +4,8 @@ Source: `BBC-SUBTITLES-V1.2.5` in `SOURCES.md`.
 
 This is a selective routing layer, not a copy of the BBC guide. A report generator shall insert only entries that materially relate to a validator finding or a separately labelled editorial observation. The `Guidance` text below is a repository-authored paraphrase; it shall not be presented as a BBC quotation.
 
+Where an entry contains `Verified excerpt`, the report may reproduce that exact short extract in quotation marks and shall attribute it to the BBC Subtitle Guidelines. The wording shall not be changed inside the quotation. Entries without that field shall use paraphrase and link only.
+
 ## Dynamic inclusion rules
 
 1. Match a finding to one or more `Signals`. Signals are concepts, not validator codes.
@@ -19,6 +21,7 @@ This is a selective routing layer, not a copy of the BBC guide. A report generat
 
 - Signals: line length, characters per line, wrapping, long subtitle
 - Guidance: Keep subtitle lines within appropriate readable lengths and resolve excessive length through considered editing or line division.
+- Verified excerpt: “the number of characters within a region does not exceed 37”
 - Link: https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/#Line-length
 
 ### BBC-NUMBER-OF-LINES
@@ -37,6 +40,7 @@ This is a selective routing layer, not a copy of the BBC guide. A report generat
 
 - Signals: duration, display time, reading speed, short subtitle
 - Guidance: Allocate sufficient display time for the subtitle to be read, while balancing speech, pictures, and editing.
+- Verified excerpt: “recommended rate of 160-180 words per minute”
 - Link: https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/#Target-minimum-timing
 
 ### BBC-CONSISTENT-TIMING
@@ -115,6 +119,7 @@ This is a selective routing layer, not a copy of the BBC guide. A report generat
 
 - Signals: style reference, styling attribute, `xml:id`, inherited style
 - Guidance: Apply style attributes and references through the TTML structures permitted by the target profile.
+- Verified excerpt: “must be applied to content elements”
 - Link: https://www.bbc.co.uk/accessibility/forproducts/guides/subtitles/#Applying-style-attributes-to-content-elements
 
 ### BBC-REGIONS

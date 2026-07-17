@@ -5,30 +5,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{REPORT_TITLE}}</title>
   <style>
-    :root { color-scheme: light; --ink:#18212b; --muted:#52606d; --line:#cbd5df; --paper:#fff; --panel:#f4f7fa; --error:#a51d2d; --warning:#8a5a00; --info:#185b8f; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:#e9eef3; color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
-    main { width:min(72rem,calc(100% - 2rem)); margin:2rem auto; padding:clamp(1rem,3vw,3rem); background:var(--paper); box-shadow:0 0.25rem 1rem #18212b20; }
-    h1,h2,h3 { line-height:1.2; } h1 { margin-top:0; } a { color:#064f87; }
-    .lede,.meta,.limitations { color:var(--muted); } .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:1rem; }
-    .metric,.finding,.provenance,.limitations { border:1px solid var(--line); border-radius:.35rem; padding:1rem; }
-    .metric strong { display:block; font-size:1.8rem; } .finding { margin:1rem 0; border-left-width:.45rem; }
-    .finding.error { border-left-color:var(--error); } .finding.warning { border-left-color:var(--warning); } .finding.info { border-left-color:var(--info); }
-    .severity { font-weight:700; text-transform:uppercase; } dl { display:grid; grid-template-columns:max-content 1fr; gap:.35rem 1rem; } dt { font-weight:700; } dd { margin:0; min-width:0; }
-    pre,code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; } pre { overflow:auto; padding:1rem; background:#101820; color:#f7fafc; white-space:pre-wrap; overflow-wrap:anywhere; }
-    table { width:100%; border-collapse:collapse; } th,td { padding:.55rem; border:1px solid var(--line); text-align:left; } th { background:var(--panel); }
-    @media (max-width:40rem) { main { width:100%; margin:0; box-shadow:none; } dl { grid-template-columns:1fr; } dt { margin-top:.5rem; } }
-    @media print { body { background:#fff; } main { width:100%; margin:0; padding:0; box-shadow:none; } a { color:inherit; text-decoration:none; } .finding { break-inside:avoid; } }
+    :root {
+      color-scheme: light;
+      --ink:#17212b; --muted:#536273; --paper:#fff; --wash:#f3f6f8; --line:#d7dee5;
+      --navy:#102a43; --blue:#0b63a5; --blue-pale:#eaf4fb; --red:#b42334; --red-pale:#fff0f1;
+      --amber:#8a5700; --amber-pale:#fff7e0; --green:#246b49; --green-pale:#ebf7f0;
+      --radius:.75rem; --shadow:0 .8rem 2.5rem rgba(16,42,67,.10);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--wash); color:var(--ink); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    a { color:var(--blue); text-underline-offset:.15em; }
+    a:hover { text-decoration-thickness:.14em; }
+    .page { width:min(76rem,calc(100% - 2rem)); margin:2rem auto; background:var(--paper); box-shadow:var(--shadow); }
+    .hero { padding:clamp(2rem,5vw,4.5rem); color:#fff; background:linear-gradient(135deg,#102a43 0%,#0b4f7d 72%,#087a8c 100%); }
+    .eyebrow { margin:0 0 .6rem; font-size:.78rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#b9e6ff; }
+    h1,h2,h3 { line-height:1.18; letter-spacing:-.018em; }
+    h1 { max-width:18ch; margin:0; font-size:clamp(2.1rem,5vw,4rem); }
+    .hero .lede { max-width:65ch; margin:1.25rem 0 0; font-size:1.12rem; color:#e6f2fa; }
+    .hero-meta { display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; margin-top:1.5rem; color:#cde3f1; font-size:.9rem; }
+    main { padding:clamp(1.2rem,4vw,3.5rem); }
+    section + section { margin-top:3.5rem; }
+    .section-heading { margin-bottom:1rem; padding-bottom:.65rem; border-bottom:2px solid var(--navy); }
+    .section-heading h2 { margin:0; font-size:clamp(1.45rem,3vw,2rem); }
+    .section-heading p { max-width:65ch; margin:.35rem 0 0; color:var(--muted); }
+    .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); gap:1rem; }
+    .metric { min-height:7.5rem; padding:1.1rem; border:1px solid var(--line); border-radius:var(--radius); background:#fff; }
+    .metric strong { display:block; font-size:2.2rem; line-height:1; }
+    .metric span { display:block; margin-top:.55rem; color:var(--muted); font-weight:700; }
+    .metric.error { border-top:.35rem solid var(--red); background:var(--red-pale); }
+    .metric.warning { border-top:.35rem solid var(--amber); background:var(--amber-pale); }
+    .metric.info { border-top:.35rem solid var(--blue); background:var(--blue-pale); }
+    .priority-list { display:grid; gap:.75rem; padding:0; list-style:none; counter-reset:priority; }
+    .priority-list li { counter-increment:priority; display:grid; grid-template-columns:2.5rem 1fr; gap:.8rem; padding:1rem; border:1px solid var(--line); border-radius:var(--radius); }
+    .priority-list li::before { content:counter(priority); display:grid; place-items:center; width:2.5rem; height:2.5rem; border-radius:50%; color:#fff; background:var(--navy); font-weight:800; }
+    .provenance,.limitations { padding:1.1rem 1.25rem; border-left:.35rem solid var(--blue); background:var(--blue-pale); }
+    .finding-index { width:100%; border-collapse:collapse; }
+    .finding-index th,.finding-index td { padding:.7rem .8rem; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    .finding-index th { background:var(--wash); font-size:.8rem; letter-spacing:.05em; text-transform:uppercase; }
+    .finding { margin:1.4rem 0; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:#fff; box-shadow:0 .3rem 1.2rem rgba(16,42,67,.06); }
+    .finding-head { display:grid; grid-template-columns:auto 1fr auto; gap:1rem; align-items:start; padding:1.25rem; border-top:.4rem solid var(--blue); }
+    .finding.error .finding-head { border-top-color:var(--red); }
+    .finding.warning .finding-head { border-top-color:var(--amber); }
+    .finding-number { color:var(--muted); font-weight:800; }
+    .finding h3 { margin:0; font-size:1.3rem; }
+    .finding-code { margin:.3rem 0 0; color:var(--muted); font:600 .9rem ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .badge { padding:.25rem .6rem; border-radius:999px; color:#fff; background:var(--blue); font-size:.75rem; font-weight:850; letter-spacing:.05em; text-transform:uppercase; }
+    .error .badge { background:var(--red); } .warning .badge { background:var(--amber); }
+    .finding-body { display:grid; gap:1.25rem; padding:0 1.25rem 1.4rem; }
+    .impact { margin:0; padding:1rem; background:var(--wash); border-radius:.5rem; font-size:1.05rem; }
+    .impact strong { color:var(--navy); }
+    .analysis-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .panel { padding:1rem; border:1px solid var(--line); border-radius:.5rem; }
+    .panel h4,.guidance h4 { margin:0 0 .45rem; font-size:.9rem; letter-spacing:.045em; text-transform:uppercase; color:var(--navy); }
+    .panel p { margin:.3rem 0; }
+    details { border:1px solid var(--line); border-radius:.5rem; }
+    summary { cursor:pointer; padding:.8rem 1rem; font-weight:750; color:var(--navy); }
+    .evidence { padding:0 1rem 1rem; }
+    dl { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:.35rem 1rem; margin:0; }
+    dt { font-weight:750; } dd { margin:0; overflow-wrap:anywhere; }
+    pre,code { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    pre { overflow:auto; margin:.5rem 0 0; padding:1rem; border-radius:.45rem; background:#101820; color:#f4f8fb; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .guidance { padding:1rem 1.1rem; border-left:.35rem solid var(--green); background:var(--green-pale); }
+    .guidance p { margin:.35rem 0; } .guidance blockquote { margin:.7rem 0; padding-left:1rem; border-left:.2rem solid var(--green); font-style:italic; }
+    .source-note { color:var(--muted); font-size:.88rem; }
+    footer { padding:1.5rem clamp(1.2rem,4vw,3.5rem); color:#d9e8f2; background:var(--navy); }
+    @media (max-width:46rem) { .page { width:100%; margin:0; box-shadow:none; } .analysis-grid { grid-template-columns:1fr; } .finding-head { grid-template-columns:auto 1fr; } .badge { grid-column:2; justify-self:start; } dl { grid-template-columns:1fr; } dt { margin-top:.45rem; } .finding-index { display:block; overflow-x:auto; } }
+    @media print { body { background:#fff; } .page { width:100%; margin:0; box-shadow:none; } .hero { color:#000; background:#fff; border-bottom:3px solid #000; } .hero .lede,.hero-meta,.eyebrow { color:#222; } .finding { break-inside:avoid; box-shadow:none; } details > * { display:block; } a { color:inherit; } }
   </style>
 </head>
 <body>
-<main>
-  <header><h1>{{REPORT_TITLE}}</h1><p class="lede">{{EXECUTIVE_SUMMARY}}</p><p class="meta">Generated: {{GENERATED_AT}}</p></header>
-  <section aria-labelledby="summary-heading"><h2 id="summary-heading">Summary</h2><div class="summary">{{SEVERITY_METRICS}}</div></section>
-  <section aria-labelledby="provenance-heading"><h2 id="provenance-heading">Inputs and provenance</h2><div class="provenance">{{PROVENANCE}}</div></section>
-  <section aria-labelledby="findings-heading"><h2 id="findings-heading">Detailed findings</h2><!-- Each generated finding may include a context-specific guidance block selected from the verified knowledge map. -->{{FINDINGS}}</section>
-  <section aria-labelledby="limitations-heading"><h2 id="limitations-heading">Limitations and verification</h2><div class="limitations">{{LIMITATIONS}}</div></section>
-  <section aria-labelledby="sources-heading"><h2 id="sources-heading">Sources</h2>{{SOURCES}}</section>
-</main>
+<div class="page">
+  <header class="hero">
+    <p class="eyebrow">TTML validation review</p>
+    <h1>{{REPORT_TITLE}}</h1>
+    <p class="lede">{{EXECUTIVE_SUMMARY}}</p>
+    <div class="hero-meta">{{REPORT_METADATA}}</div>
+  </header>
+  <main>
+    <section aria-labelledby="summary-heading">
+      <div class="section-heading"><h2 id="summary-heading">At a glance</h2><p>{{DELIVERY_STATUS}}</p></div>
+      <div class="metrics">{{SEVERITY_METRICS}}</div>
+    </section>
+    <section aria-labelledby="priorities-heading">
+      <div class="section-heading"><h2 id="priorities-heading">What to do first</h2><p>The shortest route to a cleaner revalidation.</p></div>
+      <ol class="priority-list">{{PRIORITY_ACTIONS}}</ol>
+    </section>
+    <section aria-labelledby="provenance-heading">
+      <div class="section-heading"><h2 id="provenance-heading">Inputs and scope</h2></div>
+      <div class="provenance">{{PROVENANCE}}</div>
+    </section>
+    <section aria-labelledby="index-heading">
+      <div class="section-heading"><h2 id="index-heading">Findings index</h2><p>A compact inventory; select a finding to jump to its analysis.</p></div>
+      {{FINDINGS_INDEX}}
+    </section>
+    <section aria-labelledby="findings-heading">
+      <div class="section-heading"><h2 id="findings-heading">Findings and fixes</h2><p>Validator evidence is preserved verbatim. Causes and corrections are analysis.</p></div>
+      <!-- FINDINGS shall use .finding, .finding-head, .finding-body, .impact, .analysis-grid, .panel, details, .evidence and .guidance components defined above. -->
+      {{FINDINGS}}
+    </section>
+    <section aria-labelledby="limitations-heading">
+      <div class="section-heading"><h2 id="limitations-heading">Limitations and verification</h2></div>
+      <div class="limitations">{{LIMITATIONS}}</div>
+    </section>
+    <section aria-labelledby="sources-heading">
+      <div class="section-heading"><h2 id="sources-heading">Sources</h2></div>
+      {{SOURCES}}
+    </section>
+  </main>
+  <footer>{{FOOTER_NOTE}}</footer>
+</div>
 </body>
 </html>
