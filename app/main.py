@@ -4,7 +4,7 @@ import traceback
 import uuid
 from pathlib import Path
 
-from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
+from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -22,21 +22,21 @@ app = FastAPI(title="TTML Validation Guide")
 app.mount("/static", StaticFiles(directory=BASE / "app" / "static"), name="static")
 
 
-def process_job(job_id: str, source: Path) -> None:
+def process_job(job_id: str, source: Path, presentation: str) -> None:
     folder = source.parent
     validation = folder / f"{source.name}.validation.json"
     analysis_path = folder / f"{source.name}.analysis.json"
     report = folder / f"{source.name}.validation-report.html"
     try:
         STORE.update(job_id, status="working", stage="Validating TTML")
-        results, return_code, validator_log = run_validator(source, validation)
+        results, return_code, validator_log = run_validator(source, validation, presentation == "vertical")
         ledger = build_ledger(results)
         STORE.update(job_id, stage="Creating a helpful review", counts=ledger["counts"])
         guidance = load_guidance(BASE / "knowledge" / "BBC-SUBTITLE-GUIDANCE.md")
-        result = analyse(source.read_text(encoding="utf-8"), ledger, guidance)
+        result = analyse(source.read_text(encoding="utf-8"), ledger, guidance, presentation)
         analysis_path.write_text(result.model_dump_json(by_alias=True, indent=2), encoding="utf-8")
         STORE.update(job_id, stage="Building the report")
-        report.write_text(render_report(source.name, validation.name, ledger, result, guidance,
+        report.write_text(render_report(source.name, validation.name, presentation, ledger, result, guidance,
                                         BASE / "templates" / "report.html"), encoding="utf-8")
         (folder / "validator.log").write_text(validator_log, encoding="utf-8")
         STORE.update(job_id, status="complete", stage="Ready", validatorReturnCode=return_code,
@@ -58,10 +58,13 @@ def health():
 
 
 @app.post("/api/jobs", status_code=202)
-async def create_job(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+async def create_job(background_tasks: BackgroundTasks, file: UploadFile = File(...),
+                     presentation: str = Form(...)):
     filename = Path(file.filename or "").name
     if not filename or Path(filename).suffix.lower() not in {".xml", ".ttml"}:
         raise HTTPException(400, "Choose a TTML file ending in .xml or .ttml.")
+    if presentation not in {"horizontal", "vertical"}:
+        raise HTTPException(400, "Choose horizontal or vertical presentation.")
     limit = int(os.getenv("MAX_UPLOAD_MB", "10")) * 1024 * 1024
     content = await file.read(limit + 1)
     if len(content) > limit:
@@ -70,9 +73,10 @@ async def create_job(background_tasks: BackgroundTasks, file: UploadFile = File(
     source = DATA / "jobs" / job_id / filename
     source.parent.mkdir(parents=True, exist_ok=True)
     source.write_bytes(content)
-    STORE.update(job_id, status="queued", stage="Waiting to start", sourceFilename=filename)
-    background_tasks.add_task(process_job, job_id, source)
-    return {"id": job_id, "sourceFilename": filename}
+    STORE.update(job_id, status="queued", stage="Waiting to start", sourceFilename=filename,
+                 presentation=presentation)
+    background_tasks.add_task(process_job, job_id, source, presentation)
+    return {"id": job_id, "sourceFilename": filename, "presentation": presentation}
 
 
 @app.get("/api/jobs/{job_id}")

@@ -40,7 +40,7 @@ def _validate_coverage(analysis: Analysis, required: set[str], valid_guidance: s
         raise ValueError("Invalid model analysis: " + "; ".join(problems))
 
 
-def analyse(ttml: str, ledger: dict, guidance: dict) -> Analysis:
+def analyse(ttml: str, ledger: dict, guidance: dict, presentation: str) -> Analysis:
     if os.getenv("ANALYSIS_MODE", "openai") == "mock":
         return mock_analysis(ledger)
 
@@ -59,6 +59,7 @@ def analyse(ttml: str, ledger: dict, guidance: dict) -> Analysis:
         for item in guidance.values()
     ]
     payload = {
+        "presentationFormat": presentation,
         "sourceTtml": ttml,
         "actionableFindingGroups": actionable,
         "bbcGuidanceOptions": compact_guidance,

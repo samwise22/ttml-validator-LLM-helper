@@ -20,7 +20,7 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(ledger["findingGroups"][0]["occurrenceCount"], 2)
         analysis = mock_analysis(ledger)
         template = Path(__file__).resolve().parents[1] / "templates" / "report.html"
-        output = render_report("example.xml", "example.xml.validation.json", ledger,
+        output = render_report("example.xml", "example.xml.validation.json", "horizontal", ledger,
                                analysis, {}, template)
         self.assertIn("example.xml", output)
         self.assertIn("bad_value", output)

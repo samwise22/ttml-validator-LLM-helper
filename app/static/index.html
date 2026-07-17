@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TTML Validation Guide</title><link rel="stylesheet" href="/static/styles.css">
+  <style>.drop fieldset{display:flex;gap:.7rem 1.4rem;flex-wrap:wrap;margin:0 0 1.25rem;padding:.8rem 1rem;border:1px solid var(--line);border-radius:.5rem;text-align:left}.drop legend{padding:0 .4rem;color:#405965;font-weight:750}.drop label{display:flex;gap:.4rem;align-items:center;font-weight:700}.drop input[type=radio]{width:1.1rem;height:1.1rem;accent-color:var(--blue)}</style>
 </head>
 <body>
 <header><a class="brand" href="/">TTML <span>Validation Guide</span></a><p>BBC subtitle delivery support</p></header>
 <main>
   <section class="intro"><p class="eyebrow">From file to practical fixes</p><h1>A clearer way to review TTML validation.</h1><p>Drop in one subtitle file. The app runs the BBC validator, investigates the original TTML, and creates a complete, readable HTML guide without changing the authoritative findings.</p></section>
   <section class="workspace" aria-labelledby="upload-title">
-    <div id="drop" class="drop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"/></svg><h2 id="upload-title">Drop your TTML file here</h2><p>or choose an .xml or .ttml file</p><button id="choose">Choose file</button><input id="file" type="file" accept=".xml,.ttml,application/xml" hidden></div>
+    <div id="drop" class="drop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"/></svg><h2 id="upload-title">Drop your TTML file here</h2><p>or choose an .xml or .ttml file</p><fieldset><legend>How will these subtitles be presented?</legend><label><input type="radio" name="presentation" value="horizontal"> Horizontal</label><label><input type="radio" name="presentation" value="vertical"> Vertical</label></fieldset><button id="choose">Choose file</button><input id="file" type="file" accept=".xml,.ttml,application/xml" hidden></div>
     <div id="progress" class="progress" hidden><div class="spinner"></div><div><p class="eyebrow">Working on <span id="filename"></span></p><h2 id="stage">Preparing your file</h2><p>This page can stay open while validation and analysis finish.</p></div></div>
     <div id="error" class="error" hidden><h2>We couldn’t create the report</h2><p id="errorText"></p><button id="retry">Try another file</button></div>
     <div id="done" class="done" hidden><p class="eyebrow">Report ready</p><h2 id="doneTitle"></h2><div id="counts" class="counts"></div><div class="actions"><a id="view" class="primary">Open report</a><a id="download">Download HTML</a><button id="another">Review another file</button></div></div>

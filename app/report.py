@@ -9,7 +9,7 @@ def esc(value) -> str:
     return html.escape(str(value), quote=True)
 
 
-def render_report(source: str, validation_name: str, ledger: dict, analysis: Analysis,
+def render_report(source: str, validation_name: str, presentation: str, ledger: dict, analysis: Analysis,
                   guidance: dict, template_path: Path) -> str:
     groups = {item["id"]: item for item in ledger["findingGroups"]}
     counts = ledger["counts"]
@@ -61,10 +61,10 @@ def render_report(source: str, validation_name: str, ledger: dict, analysis: Ana
     replacements = {
         "{{REPORT_TITLE}}": f"TTML validation guide — {esc(source)}",
         "{{EXECUTIVE_SUMMARY}}": esc(analysis.executive_summary),
-        "{{REPORT_METADATA}}": f"<span>Source: <strong>{esc(source)}</strong></span>",
+        "{{REPORT_METADATA}}": f"<span>Source: <strong>{esc(source)}</strong></span><span>Presentation: <strong>{esc(presentation.title())}</strong></span>",
         "{{DELIVERY_STATUS}}": esc(analysis.delivery_status),
         "{{SEVERITY_METRICS}}": metrics, "{{PRIORITY_ACTIONS}}": priorities,
-        "{{PROVENANCE}}": f"<p>Original TTML: <strong>{esc(source)}</strong></p><p>Validator output: <strong>{esc(validation_name)}</strong></p>",
+        "{{PROVENANCE}}": f"<p>Original TTML: <strong>{esc(source)}</strong></p><p>Presentation format selected by user: <strong>{esc(presentation.title())}</strong></p><p>Validator output: <strong>{esc(validation_name)}</strong></p>",
         "{{FIX_PLAN}}": fix_plan, "{{FIX_RECIPES}}": "".join(cards),
         "{{EDITORIAL_OBSERVATIONS}}": editorial, "{{VALIDATOR_RECORD}}": record,
         "{{LIMITATIONS}}": "<ul>" + "".join(f"<li>{esc(x)}</li>" for x in analysis.limitations) + "</ul>",

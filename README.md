@@ -10,7 +10,9 @@ the final report deterministically.
 1. Open `.env` and place your OpenAI API key after `OPENAI_API_KEY=`.
 2. From this directory, run `docker compose up --build`.
 3. Open [http://localhost:8080](http://localhost:8080).
-4. Drop an `.xml` or `.ttml` file into the page.
+4. Select horizontal or vertical presentation, then drop an `.xml` or `.ttml`
+   file into the page. This is an explicit editorial choice: the application
+   shall not infer intended presentation from TTML styling.
 
 The generated HTML, validator JSON, structured analysis, original TTML and logs
 are stored under `data/jobs/`. Every output filename contains the complete
