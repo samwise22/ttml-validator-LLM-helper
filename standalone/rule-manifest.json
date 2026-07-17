@@ -1,0 +1,37 @@
+{
+  "baseline": {
+    "repository": "https://github.com/bbc/ttml-validator",
+    "commit": "5955c71bbba9ceb7bde39f19730c925a0ce1e9c7"
+  },
+  "countingModel": {
+    "issueType": "Exact status, code and message tuple",
+    "occurrence": "One affected source location within an issue type",
+    "summaryRecords": "Not generated and not counted as independent issues"
+  },
+  "claimedCodes": [
+    "preParse_byteOrderMark",
+    "preParse_nullBytes",
+    "xml_dtd",
+    "xml_entity_decl",
+    "xml_parse",
+    "xml_root_element",
+    "xml_tt_namespace",
+    "xml_id_unique",
+    "xml_xsd",
+    "imsc_parameter_activeArea",
+    "ttml_metadata_copyright",
+    "ttml_element_style",
+    "bbc_text_backgroundColor_constraint",
+    "bbc_text_span_constraint",
+    "ttml_element_br",
+    "ebuttd_timing_attribute_constraint",
+    "bbc_timing_gaps",
+    "ebuttd_empty_div_constraint"
+  ],
+  "partialCodeCoverage": {
+    "xml_xsd": "Only the EBU-TT-D head child-order constraint is implemented. Other XSD failures remain unknown.",
+    "bbc_text_backgroundColor_constraint": "Referenced and chained span styles are implemented; the remaining computed-style system is not.",
+    "ebuttd_timing_attribute_constraint": "Non-frame clock syntax and prohibited dur on p are implemented; inherited timing is not.",
+    "bbc_timing_gaps": "Absolute p begin/end timing is implemented; nested, segment-relative and spatial-overlap timing is not."
+  }
+}

@@ -18,6 +18,14 @@ area and every unimplemented area so absence of a finding cannot be mistaken for
 a full validation pass. Parity with the Python validator shall be demonstrated
 with shared fixtures before the Docker implementation is deprecated.
 
+Standalone counts distinguish **issue types** from **affected locations**.
+Repeated occurrences of the same severity, code and message are consolidated in
+the repair guide but retained individually in the complete occurrence record.
+See [standalone/PARITY.md](standalone/PARITY.md) and the machine-readable
+[rule manifest](standalone/rule-manifest.json) for the validator baseline,
+claimed rules, known partial implementations and the official-validator parity
+audit.
+
 ## Run the application
 
 1. Open `.env` and place your OpenAI API key after `OPENAI_API_KEY=`.
