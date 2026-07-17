@@ -30,7 +30,9 @@ For every validator finding, the report **shall** reproduce the following fields
 
 The generator **shall not** normalize spelling, punctuation, capitalization, whitespace within meaningful values, or severity labels in these fields. A display label may accompany a raw value, but shall never replace it.
 
-The report **shall** preserve finding order unless it also provides an explicit, lossless mapping to the original order. Summary counts **shall** be derived from the validator output and **shall** reconcile with the detailed findings.
+The report **shall** preserve finding order unless it provides an explicit, lossless mapping to the original order. Summary counts **shall** be derived from the validator output and **shall** reconcile with the validator record.
+
+Findings with exactly identical code, severity, and message **may** be represented as one validator-record group, provided that every original location is reproduced verbatim, the group states the number of original findings, and original order can be reconstructed. This is lossless grouping, not deduplication: no code, severity, message, location, or occurrence may disappear.
 
 ## 3. Analysis
 
@@ -88,7 +90,7 @@ The executive summary **shall** answer: whether delivery is currently blocked, w
 
 Each fix recipe **shall** have a short human-readable title and follow `spec/HELPFUL-REPORT-GUIDE.md`. Complete validator evidence **should** be visually subordinate to the fix guide and remain available in the validator-record section.
 
-Repeated instances of the same validator code **may** be grouped for explanation only when every original instance remains individually listed with its unmodified severity, message, and location.
+Repeated instances may be grouped for explanation as fix recipes. The validator record may also use the lossless grouping defined in section 2.
 
 If the validator reports no findings, the report **shall** say so without claiming broader correctness. Empty sections **should** be omitted.
 
@@ -109,3 +111,5 @@ Before returning a report, the generator **shall** verify that:
 - every proposed snippet is labelled unvalidated unless revalidation evidence exists;
 - every link is present in the verified source register; and
 - the result is a complete standalone document, not Markdown or a fenced code block.
+
+The generator **shall not** create or return a partial, abbreviated, placeholder, or truncated report. Before generation, it **should** assess whether the complete output can fit within its available output or artifact limits. If complete lossless coverage cannot be produced, it **shall** stop before creating a file and state that the environment cannot generate a complete report for this input size.

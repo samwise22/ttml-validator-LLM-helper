@@ -7,7 +7,7 @@ This guide defines the transformation that makes the output more useful than raw
 The report **shall** have two clearly separated layers:
 
 1. **Fix guide** — a practitioner-oriented explanation organised by root cause and recommended edit.
-2. **Validator record** — a complete, lossless record of every authoritative validator finding.
+2. **Validator record** — a complete, lossless record of every authoritative validator finding, using lossless identical-message grouping where useful.
 
 The fix guide **shall not** repeat the validator output finding by finding. The validator record **shall not** contain invented interpretation.
 
@@ -74,3 +74,5 @@ Avoid stock phrases such as “This issue indicates that”, “It is important 
 ## 8. Minimum usefulness test
 
 Before returning the report, the generator **shall** confirm that a practitioner can locate and perform each edit without reopening the validator output; every recipe explains something beyond its validator message; repeated symptoms are consolidated sensibly; every recipe traces to all relevant findings; and the next action is obvious within ten seconds.
+
+Completeness outranks presentation. The generator **shall not** spend its output budget on decorative prose and then truncate the validator record. It **shall** use concise recipes and lossless identical-message grouping to preserve complete coverage.

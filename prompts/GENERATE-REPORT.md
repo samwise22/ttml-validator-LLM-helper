@@ -9,3 +9,5 @@ This task instruction does not replace or weaken the engineering standard. Treat
 Write for a subtitle practitioner. Lead with impact and the next useful action, use specific human-readable finding titles, and avoid repetitive stock language. Populate the template's visual components and class names rather than emitting unstyled generic markup.
 
 The primary output is a root-cause-based fix guide, not a decorated copy of the validator output. Consolidate related symptoms into practical repair recipes, show contextual before-and-after TTML, and keep the complete unmodified validator output in the traceability record.
+
+Never create a partial or truncated artifact. Assess whether the complete report will fit before writing it. Use lossless identical-message grouping to reduce repetition. If complete coverage is impossible within the environment's limits, stop before creating a file and explain that limitation.
