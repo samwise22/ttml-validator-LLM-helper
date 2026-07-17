@@ -5,6 +5,19 @@ standalone HTML validation guide. It runs the BBC TTML Validator, preserves its
 output losslessly, uses OpenAI for source-aware remediation analysis, and renders
 the final report deterministically.
 
+## Browser-only proof of concept
+
+[standalone/ttml-guide.html](standalone/ttml-guide.html) is an experimental,
+single-file application with embedded CSS, JavaScript validation rules and BBC
+guidance routing data. It requires no server, Docker, API key or internet
+connection: open the file in a modern browser and select a TTML document.
+
+The PoC is an independent partial JavaScript port and shall not yet be described
+as the authoritative BBC validator. Its report names every implemented check
+area and every unimplemented area so absence of a finding cannot be mistaken for
+a full validation pass. Parity with the Python validator shall be demonstrated
+with shared fixtures before the Docker implementation is deprecated.
+
 ## Run the application
 
 1. Open `.env` and place your OpenAI API key after `OPENAI_API_KEY=`.
