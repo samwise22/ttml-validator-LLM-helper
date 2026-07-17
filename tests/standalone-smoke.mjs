@@ -27,10 +27,20 @@ const context = vm.createContext({
   location: { reload() {} },
   setTimeout,
 });
-vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings;', context);
+vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render;', context);
 const bytes = new Uint8Array(fs.readFileSync(sourcePath));
 const text = new TextDecoder().decode(bytes);
 const findings = context.__validate(text, bytes, 'vertical');
+const rendered = context.__render({ name: sourcePath.split('/').pop() }, 'vertical', findings);
+if (!rendered.includes('<details open><summary>Example source context</summary>')) {
+  throw new Error('Source context should be expanded by default.');
+}
+if (rendered.includes('<details open><summary>Every affected location')) {
+  throw new Error('Occurrence locations should be collapsed by default.');
+}
+if (!rendered.includes('target="_blank" rel="noopener noreferrer"')) {
+  throw new Error('BBC guidance links should open safely in a new tab.');
+}
 const codes = new Set(findings.map(item => item.code));
 for (const expected of ['imsc_parameter_activeArea', 'ttml_metadata_copyright',
                         'bbc_timing_gaps']) {
