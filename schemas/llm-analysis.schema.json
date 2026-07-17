@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TTML report LLM analysis",
+  "type": "object",
+  "required": ["schemaVersion", "packageId", "sourceFilename", "executiveSummary", "deliveryStatus", "priorities", "recipes", "editorialObservations", "limitations"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "packageId": {"type": "string"},
+    "sourceFilename": {"type": "string"},
+    "executiveSummary": {"type": "string", "minLength": 1},
+    "deliveryStatus": {"type": "string", "minLength": 1},
+    "priorities": {"type": "array", "maxItems": 3, "items": {"type": "string", "minLength": 1}},
+    "recipes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "findingGroupIds", "impact", "likelyCause", "action", "beforeTtml", "proposedTtml", "expectedOutcome", "guidanceIds"],
+        "properties": {
+          "id": {"type": "string"}, "title": {"type": "string"},
+          "findingGroupIds": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "impact": {"type": "string"}, "likelyCause": {"type": "string"}, "action": {"type": "string"},
+          "beforeTtml": {"type": "string"}, "proposedTtml": {"type": "string"}, "expectedOutcome": {"type": "string"},
+          "guidanceIds": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "editorialObservations": {"type": "array"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

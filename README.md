@@ -29,6 +29,30 @@ Attach the original `.ttml`, the validator output, and generated `DIST.md`. Inst
 
 The build is deterministic and uses only standard shell tools. `DIST.md` is generated and is not hand-edited.
 
+## Two-Shortcut pipeline
+
+The current pipeline keeps authoritative data and HTML generation out of the LLM:
+
+1. `shortcuts/validate-and-prepare-package.sh` accepts an original TTML file, runs the BBC validator, and creates `<original-filename>.validation.json` plus `<original-filename>.llm-package.json`.
+2. The user attaches the single package to an LLM. The embedded task requires a structured `<original-filename>.llm-analysis.json` response, not HTML.
+3. `shortcuts/build-report-from-analysis.sh` accepts that analysis file, finds its sibling package, validates all IDs and actionable-group coverage, and renders `<original-filename>.validation-report.html` deterministically.
+
+The complete original TTML filename, including its extension, is present in every derived filename and embedded in every structured artifact.
+
+The Shortcut scripts currently contain local paths for the validator, helper checkout, and `uv` binary. Adjust those three variables if the repositories are installed elsewhere.
+
+### Command-line equivalents
+
+```sh
+./scripts/prepare-package.sh \
+  --ttml /path/programme.ttml \
+  --validator /path/programme.ttml.validation.json
+
+./scripts/render-report.sh \
+  --package /path/programme.ttml.llm-package.json \
+  --analysis /path/programme.ttml.llm-analysis.json
+```
+
 ## Project status
 
 This foundation defines the trust boundary, reporting contract, template, knowledge-source governance, and a curated BBC guidance-routing map. Parser-specific examples, conformance fixtures, and automated HTML checks remain future work.
