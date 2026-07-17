@@ -1,4 +1,42 @@
-# TTML Validator LLM Helper
+# TTML Validation Guide
+
+A local browser application that turns a TTML subtitle file into a professional,
+standalone HTML validation guide. It runs the BBC TTML Validator, preserves its
+output losslessly, uses OpenAI for source-aware remediation analysis, and renders
+the final report deterministically.
+
+## Run the application
+
+1. Open `.env` and place your OpenAI API key after `OPENAI_API_KEY=`.
+2. From this directory, run `docker compose up --build`.
+3. Open [http://localhost:8080](http://localhost:8080).
+4. Drop an `.xml` or `.ttml` file into the page.
+
+The generated HTML, validator JSON, structured analysis, original TTML and logs
+are stored under `data/jobs/`. Every output filename contains the complete
+original input filename.
+
+To exercise the complete workflow without making an API call, set
+`ANALYSIS_MODE=mock` in `.env`. This produces a structurally complete but
+deliberately generic report.
+
+## Design guarantees
+
+- Validator output is authoritative. Report code never asks the model to
+  reproduce codes, severities, messages or locations.
+- Every actionable finding group shall be covered exactly once by structured
+  model analysis before a report is rendered.
+- BBC excerpts and deep links come only from the curated repository knowledge
+  base; the model may select them but may not create them.
+- The HTML renderer is deterministic and the output is a standalone HTML5 file
+  with embedded report CSS.
+- Proposed corrections are guidance, not an automatic mutation of the source.
+
+## Configuration
+
+See `.env.example`. The Docker image pins the BBC validator source revision so a
+deployment remains reproducible. This first release is intended for a trusted,
+single-user local installation; do not expose it directly to the public internet.
 
 A model-agnostic engineering standard and knowledge bundle for producing professional, standalone HTML5 reports from:
 

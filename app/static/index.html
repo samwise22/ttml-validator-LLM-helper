@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TTML Validation Guide</title><link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header><a class="brand" href="/">TTML <span>Validation Guide</span></a><p>BBC subtitle delivery support</p></header>
+<main>
+  <section class="intro"><p class="eyebrow">From file to practical fixes</p><h1>A clearer way to review TTML validation.</h1><p>Drop in one subtitle file. The app runs the BBC validator, investigates the original TTML, and creates a complete, readable HTML guide without changing the authoritative findings.</p></section>
+  <section class="workspace" aria-labelledby="upload-title">
+    <div id="drop" class="drop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 15v4h14v-4"/></svg><h2 id="upload-title">Drop your TTML file here</h2><p>or choose an .xml or .ttml file</p><button id="choose">Choose file</button><input id="file" type="file" accept=".xml,.ttml,application/xml" hidden></div>
+    <div id="progress" class="progress" hidden><div class="spinner"></div><div><p class="eyebrow">Working on <span id="filename"></span></p><h2 id="stage">Preparing your file</h2><p>This page can stay open while validation and analysis finish.</p></div></div>
+    <div id="error" class="error" hidden><h2>We couldn’t create the report</h2><p id="errorText"></p><button id="retry">Try another file</button></div>
+    <div id="done" class="done" hidden><p class="eyebrow">Report ready</p><h2 id="doneTitle"></h2><div id="counts" class="counts"></div><div class="actions"><a id="view" class="primary">Open report</a><a id="download">Download HTML</a><button id="another">Review another file</button></div></div>
+  </section>
+  <section class="promise"><div><strong>Complete</strong><span>Every validator occurrence is carried into the report.</span></div><div><strong>Practical</strong><span>Related findings become contextual repair recipes.</span></div><div><strong>Traceable</strong><span>Verified BBC guidance is linked where relevant.</span></div></section>
+</main>
+<footer>Files remain on this local installation. Proposed corrections shall be applied to a copy and revalidated.</footer>
+<script src="/static/app.js"></script>
+</body></html>
