@@ -8,6 +8,8 @@ Normative terms: **shall**, **should**, and **may** indicate requirement, recomm
 
 This standard defines how a capable language model generates a professional HTML report from an original TTML document, BBC TTML Validator output, and this repository's knowledge bundle.
 
+The report **shall** also conform to `spec/HELPFUL-REPORT-GUIDE.md`, which defines how findings are transformed into an actionable fix guide without weakening the authoritative record.
+
 The report generator:
 
 - **shall** treat validator output as the authoritative record of findings;
@@ -74,16 +76,17 @@ The report **shall** contain, in order:
 2. a decision-oriented executive summary and severity counts;
 3. a “What to do first” list containing no more than three prioritised actions;
 4. input/provenance statement;
-5. a compact findings index;
-6. detailed findings;
-7. limitations and verification status; and
-8. source list.
+5. an ordered fix plan grouped by likely root cause;
+6. separately labelled editorial observations, when supported;
+7. the complete validator record;
+8. limitations and verification status; and
+9. source list.
 
 The report **shall** be written for a subtitle practitioner, not for the report generator. It **shall not** use repetitive stock phrases, narrate the generation process, or repeat limitations inside every finding. Explanations **should** be direct, specific to the supplied TTML, and action-oriented.
 
 The executive summary **shall** answer: whether delivery is currently blocked, which problem pattern matters most, and what the reviewer should do next. It **shall not** merely restate counts.
 
-Each finding **shall** have a short human-readable title in addition to the preserved validator message. It **shall** present information in this order: impact, validator evidence, likely cause, recommended change, corrected example, and relevant BBC guidance. Evidence **should** be visually subordinate to the impact and action unless expanded by the reader.
+Each fix recipe **shall** have a short human-readable title and follow `spec/HELPFUL-REPORT-GUIDE.md`. Complete validator evidence **should** be visually subordinate to the fix guide and remain available in the validator-record section.
 
 Repeated instances of the same validator code **may** be grouped for explanation only when every original instance remains individually listed with its unmodified severity, message, and location.
 
