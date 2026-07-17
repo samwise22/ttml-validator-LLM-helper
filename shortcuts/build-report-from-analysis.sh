@@ -1,7 +1,7 @@
 #!/bin/bash
 set -u
 
-helper_dir="/Users/rosss16/ttml-validator-LLM-helper"
+helper_dir="/Users/rosss16/ttml-validator/llm-helper"
 analysis_file="$1"
 
 notify() {

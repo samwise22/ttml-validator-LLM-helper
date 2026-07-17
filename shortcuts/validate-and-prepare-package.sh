@@ -4,7 +4,7 @@ set -u
 export UV_CACHE_DIR="/tmp/ttml-validator-uv-cache"
 
 validator_dir="/Users/rosss16/ttml-validator"
-helper_dir="/Users/rosss16/ttml-validator-LLM-helper"
+helper_dir="/Users/rosss16/ttml-validator/llm-helper"
 uv_bin="/Users/rosss16/.local/bin/uv"
 source_file="$1"
 
@@ -56,7 +56,12 @@ if [[ ! -s "$validation_file" ]]; then
   exit 1
 fi
 
-cd "$helper_dir" || exit 1
+if ! cd "$helper_dir"; then
+  printf 'ERROR: Helper directory not found: %s\n' "$helper_dir" >>"$log_file"
+  notify "Package failed; helper directory was not found"
+  /usr/bin/open -R "$log_file"
+  exit 1
+fi
 if ! ./scripts/prepare-package.sh \
   --ttml "$source_file" \
   --validator "$validation_file" \
