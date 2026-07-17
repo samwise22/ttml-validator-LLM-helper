@@ -2,14 +2,48 @@
 """Create a self-contained LLM analysis package from TTML and validator JSON."""
 
 import argparse
+import codecs
 import hashlib
 import json
+import re
 from collections import OrderedDict
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 STATUS = {0: "pass", 1: "info", 2: "warning", 3: "error"}
+
+
+def read_xml_text(path: Path) -> tuple[str, str]:
+    """Decode XML using its BOM or declared encoding, following XML conventions."""
+    raw = path.read_bytes()
+    bom_encodings = (
+        (codecs.BOM_UTF32_BE, "utf-32"),
+        (codecs.BOM_UTF32_LE, "utf-32"),
+        (codecs.BOM_UTF8, "utf-8-sig"),
+        (codecs.BOM_UTF16_BE, "utf-16"),
+        (codecs.BOM_UTF16_LE, "utf-16"),
+    )
+    for bom, encoding in bom_encodings:
+        if raw.startswith(bom):
+            return raw.decode(encoding), encoding
+
+    declaration = re.match(
+        br"\s*<\?xml[^>]*\bencoding\s*=\s*['\"]([^'\"]+)['\"]",
+        raw[:512],
+        flags=re.IGNORECASE,
+    )
+    encoding = declaration.group(1).decode("ascii") if declaration else "utf-8"
+    try:
+        codecs.lookup(encoding)
+    except LookupError as exc:
+        raise ValueError(f"Unsupported XML encoding {encoding!r} in {path.name}") from exc
+    try:
+        return raw.decode(encoding), encoding
+    except UnicodeDecodeError as exc:
+        raise ValueError(
+            f"Could not decode {path.name} using its XML encoding {encoding!r}: {exc}"
+        ) from exc
 
 
 def read_json(path: Path):
@@ -66,7 +100,7 @@ def main() -> None:
     parser.add_argument("--knowledge", type=Path)
     args = parser.parse_args()
 
-    ttml_text = args.ttml.read_text(encoding="utf-8")
+    ttml_text, source_encoding = read_xml_text(args.ttml)
     results = read_json(args.validator)
     if not isinstance(results, list) or not all(isinstance(x, dict) for x in results):
         raise SystemExit("Validator JSON must be a list of objects.")
@@ -86,7 +120,7 @@ def main() -> None:
         "schemaVersion": "1.0",
         "packageId": package_id,
         "createdAt": datetime.now(timezone.utc).isoformat(),
-        "source": {"filename": source_filename, "ttml": ttml_text},
+        "source": {"filename": source_filename, "encoding": source_encoding, "ttml": ttml_text},
         "validation": {
             "filename": args.validator.name,
             "raw": results,
