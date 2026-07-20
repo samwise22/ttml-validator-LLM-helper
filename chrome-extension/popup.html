@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BBC Subtitle Details</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1>BBC subtitle details</h1>
+    <p id="status">Checking this page…</p>
+    <label for="pid">Media PID</label>
+    <div class="field-row">
+      <input id="pid" readonly placeholder="Not detected">
+      <button type="button" data-copy="pid">Copy</button>
+    </div>
+    <label for="subtitleUrl">Subtitle XML URL</label>
+    <textarea id="subtitleUrl" readonly placeholder="Not detected"></textarea>
+    <button type="button" data-copy="subtitleUrl">Copy subtitle URL</button>
+    <p class="hint">If a field is empty, start the video with subtitles enabled, then open this extension again.</p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "BBC Subtitle Details",
+  "version": "0.1.0",
+  "description": "Find the playable media PID and TTML subtitle URL used by a BBC page.",
+  "permissions": ["storage", "tabs", "webRequest", "clipboardWrite"],
+  "host_permissions": [
+    "https://www.bbc.co.uk/*",
+    "https://www.bbc.com/*",
+    "https://open.live.bbc.co.uk/*",
+    "https://open.test.bbc.co.uk/*",
+    "https://*.bbci.co.uk/*",
+    "https://*.akamaized.net/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.bbc.co.uk/*", "https://www.bbc.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "BBC Subtitle Details",
+    "default_popup": "popup.html"
+  }
+}

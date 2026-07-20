@@ -18,12 +18,6 @@ area and every unimplemented area so absence of a finding cannot be mistaken for
 a full validation pass. Parity with the Python validator shall be demonstrated
 with shared fixtures before the Docker implementation is deprecated.
 
-When the same HTML file is served from `https://www.bbc.co.uk`, it can import a
-BBC News or iPlayer page directly. The browser reads same-origin page metadata,
-uses BBC Media Selector's JavaScript callback response to find the HTTPS caption
-resource, and downloads the CORS-enabled TTML. This route remains entirely
-client-side; it does not use the Docker application or a repository API.
-
 Standalone counts distinguish **issue types** from **affected locations**.
 Repeated occurrences of the same severity, code and message are consolidated in
 the repair guide but retained individually in the complete occurrence record.
@@ -31,6 +25,10 @@ See [standalone/PARITY.md](standalone/PARITY.md) and the machine-readable
 [rule manifest](standalone/rule-manifest.json) for the validator baseline,
 claimed rules, known partial implementations and the official-validator parity
 audit.
+
+The optional [BBC Subtitle Details Chrome extension](chrome-extension/README.md)
+captures the playable PID and signed subtitle XML request used by a BBC video
+page and presents both values in copyable fields.
 
 ## Run the application
 

@@ -28,7 +28,7 @@ const context = vm.createContext({
   location: { reload() {} },
   setTimeout,
 });
-vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues; globalThis.__extractBbcMedia = extractBbcMedia; globalThis.__captionUrlFromSelector = captionUrlFromSelector;', context);
+vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues;', context);
 const validateButton = document.querySelector('#validateSource');
 if (!validateButton.disabled) throw new Error('Validate should initially be disabled.');
 document.querySelector('#pasteSource').value = '<tt></tt>';
@@ -100,25 +100,6 @@ for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'pasted-subtitles.ttml', 'id="validateSource"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
-}
-for (const importUi of ['id="bbcUrl"', 'Import from a BBC page',
-                        'importBbcTtml', '/format/json/jsfunc/${callback}',
-                        "location.origin!=='https://www.bbc.co.uk'", 'data.versionPid',
-                        "previewMediaEnvironment='live'"]) {
-  if (!html.includes(importUi)) throw new Error(`Missing BBC live-import route: ${importUi}`);
-}
-const importedMedia = context.__extractBbcMedia(
-  '\\"media\\":{\\"pid\\":\\"p0nztvgw\\",\\"items\\":[{\\"id\\":\\"p0nzvlc5\\",\\"idType\\":\\"versionID\\",\\"kind\\":\\"programme\\",\\"title\\":\\"Example video\\"}]}'
-);
-if (importedMedia.programmePid !== 'p0nztvgw' || importedMedia.versionPid !== 'p0nzvlc5') {
-  throw new Error('BBC page metadata should resolve programme and version PIDs.');
-}
-const captionUrl = context.__captionUrlFromSelector({media:[{kind:'captions',connection:[
-  {protocol:'http',href:'http://example.invalid/sub.xml'},
-  {protocol:'https',href:'https://vod-sub-uk.live.cf.md.bbci.co.uk/sub.xml'},
-]}]});
-if (!captionUrl.startsWith('https://vod-sub-uk.live.cf.md.bbci.co.uk/')) {
-  throw new Error('BBC Media Selector should resolve the HTTPS caption connection.');
 }
 if (!html.includes('id="validateSource" type="button" disabled')) {
   throw new Error('Validate TTML should start disabled until source and presentation are supplied.');
