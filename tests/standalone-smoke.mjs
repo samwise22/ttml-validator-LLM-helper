@@ -80,6 +80,9 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
 }
 for (const smpFeature of ['BBC SMP preview', 'SMP.subtitlesHref',
                           'application/ttml+xml', "versionID:'p049sq7k'",
+                          "player.bind('mediaItemChanged'",
+                          "player.bind('loadedmetadata'",
+                          "player.bind('timeupdate'",
                           'mountLocalPreview(panel,text,mode)']) {
   if (!html.includes(smpFeature)) throw new Error(`Missing guarded SMP preview feature: ${smpFeature}`);
 }
