@@ -64,6 +64,10 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
                           'id="previewHost"', 'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
+for (const pasteUi of ['id="pasteSource"', 'id="pasteName"',
+                       'pasted-subtitles.ttml', 'Review pasted TTML']) {
+  if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
+}
 if (!rendered.includes('Fails implemented compliance checks') ||
     !rendered.includes('Compliance error') || rendered.includes('Blocking error')) {
   throw new Error('Validator errors should be described as compliance errors.');
