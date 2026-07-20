@@ -48,6 +48,9 @@ const rendered = context.__render(
 if (!rendered.includes('<details open><summary>Example source context</summary>')) {
   throw new Error('Source context should be expanded by default.');
 }
+for (const tokenClass of ['xml-code', 'xml-tag', 'xml-attr', 'xml-value']) {
+  if (!rendered.includes(tokenClass)) throw new Error(`XML excerpts should highlight ${tokenClass}.`);
+}
 if (rendered.includes('<details open><summary>Every affected location')) {
   throw new Error('Occurrence locations should be collapsed by default.');
 }
