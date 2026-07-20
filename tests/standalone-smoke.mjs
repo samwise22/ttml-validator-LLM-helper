@@ -73,7 +73,8 @@ if (staticReport.includes('id="previewHost"') || staticReport.includes('class="s
   throw new Error('Downloaded reports should not contain an empty interactive preview area.');
 }
 for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
-                          'source-highlight xml-code', 'id="previewHost"',
+                          'source-highlight xml-code', 'wrap="soft"',
+                          'overflow-wrap:anywhere', 'id="previewHost"',
                           'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
