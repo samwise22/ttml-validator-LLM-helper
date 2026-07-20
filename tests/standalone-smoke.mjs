@@ -80,7 +80,7 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
 }
 for (const smpFeature of ['<h3>Caption preview</h3>', 'SMP.subtitlesHref',
                           'application/ttml+xml',
-                          "DEFAULT_SMP_MEDIA_IDS={horizontal:'p01xbcsx',vertical:'p01xbctf'}",
+                          "DEFAULT_SMP_MEDIA_IDS={horizontal:'p01xbcsz',vertical:'p01xbcth'}",
                           'previewMediaVersion=DEFAULT_SMP_MEDIA_IDS[mode]',
                           "previewMediaEnvironment='test'",
                           'id="smpPid"', 'placeholder="Enter a valid PID"',
