@@ -28,7 +28,7 @@ const context = vm.createContext({
   location: { reload() {} },
   setTimeout,
 });
-vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues;', context);
+vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues; globalThis.__prettyTtml = prettyTtml;', context);
 const validateButton = document.querySelector('#validateSource');
 if (!validateButton.disabled) throw new Error('Validate should initially be disabled.');
 document.querySelector('[data-method="paste"]').dispatchEvent(new window.Event('click'));
@@ -43,6 +43,11 @@ const bytes = new Uint8Array(fs.readFileSync(sourcePath));
 const text = new TextDecoder().decode(bytes);
 const findings = context.__validate(text, bytes, 'vertical');
 const cues = context.__previewCues(text);
+const formattedText = context.__prettyTtml(text);
+const formattedCues = context.__previewCues(formattedText);
+if (!formattedText.includes('\n  <') || JSON.stringify(formattedCues) !== JSON.stringify(cues)) {
+  throw new Error('Imported TTML formatting should add indentation without changing caption cues.');
+}
 if (!cues.length || !cues.every(cue => cue.end > cue.begin && cue.lines.length)) {
   throw new Error('Caption preview should contain valid timed cues.');
 }
@@ -90,7 +95,7 @@ for (const smpFeature of ['<h3>Caption preview</h3>', 'SMP.subtitlesHref',
                           'value="test"', 'value="live"',
                           'id="smpSubtitleTimeline"', 'Subtitle range',
                           'startTime:Math.max(0,subtitleStart-.25)',
-                          'autoplay:false,muted:true',
+                          'autoplay:false,muted:isSample',
                           "player.bind('mediaItemChanged'",
                           "player.bind('loadedmetadata'",
                           "player.bind('timeupdate'",
