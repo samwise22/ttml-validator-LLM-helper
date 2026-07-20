@@ -79,7 +79,9 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
 for (const smpFeature of ['<h3>Caption preview</h3>', 'SMP.subtitlesHref',
-                          'application/ttml+xml', "DEFAULT_SMP_MEDIA_ID='m002z5r2'",
+                          'application/ttml+xml',
+                          "DEFAULT_SMP_MEDIA_IDS={horizontal:'p01xbcsx',vertical:'p01xbctf'}",
+                          'previewMediaVersion=DEFAULT_SMP_MEDIA_IDS[mode]',
                           "previewMediaEnvironment='test'",
                           'id="smpPid"', 'placeholder="Enter a valid PID"',
                           'Media: ${isSample?\'Sample\':esc(mediaVersion)}',
