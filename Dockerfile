@@ -20,6 +20,7 @@ COPY app ./app
 COPY templates ./templates
 COPY knowledge ./knowledge
 COPY schemas ./schemas
+COPY standalone ./standalone
 
 RUN mkdir -p /app/data && useradd --create-home --uid 10001 appuser \
     && chown -R appuser:appuser /app

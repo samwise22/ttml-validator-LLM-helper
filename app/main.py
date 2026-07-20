@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from .analysis import analyse
+from .bbc_import import BBCImportError, import_bbc_ttml
 from .guidance import load_guidance
 from .jobs import JobStore
 from .ledger import build_ledger
@@ -52,9 +53,32 @@ def home():
     return FileResponse(BASE / "app" / "static" / "index.html")
 
 
+@app.get("/standalone", response_class=HTMLResponse)
+def standalone():
+    return FileResponse(BASE / "standalone" / "ttml-guide.html")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/api/import-bbc")
+def import_bbc(url: str):
+    try:
+        imported = import_bbc_ttml(url)
+    except BBCImportError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {
+        "pageUrl": imported.page_url,
+        "programmePid": imported.programme_pid,
+        "versionPid": imported.version_pid,
+        "title": imported.title,
+        "orientation": imported.orientation,
+        "subtitlesUrl": imported.subtitles_url,
+        "filename": f"{imported.version_pid}.xml",
+        "ttml": imported.ttml,
+    }
 
 
 @app.post("/api/jobs", status_code=202)

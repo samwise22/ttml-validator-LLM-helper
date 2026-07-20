@@ -101,6 +101,11 @@ for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
 }
+for (const importUi of ['id="bbcUrl"', 'Import from a BBC page',
+                        '/api/import-bbc?url=', 'data.versionPid',
+                        "previewMediaEnvironment='live'"]) {
+  if (!html.includes(importUi)) throw new Error(`Missing BBC live-import route: ${importUi}`);
+}
 if (!html.includes('id="validateSource" type="button" disabled')) {
   throw new Error('Validate TTML should start disabled until source and presentation are supplied.');
 }

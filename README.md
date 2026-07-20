@@ -18,6 +18,13 @@ area and every unimplemented area so absence of a finding cannot be mistaken for
 a full validation pass. Parity with the Python validator shall be demonstrated
 with shared fixtures before the Docker implementation is deprecated.
 
+When served with the companion API, the PoC can also accept a BBC News or iPlayer
+page URL. The API extracts the page's version PID, asks BBC Media Selector for the
+associated caption resource, downloads the TTML, and returns it to the same
+browser validation flow. Direct file and pasted-source routes remain independent
+of the API. Run the Docker application and open
+[http://localhost:8080/standalone](http://localhost:8080/standalone) to test it.
+
 Standalone counts distinguish **issue types** from **affected locations**.
 Repeated occurrences of the same severity, code and message are consolidated in
 the repair guide but retained individually in the complete occurrence record.
