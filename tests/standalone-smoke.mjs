@@ -79,7 +79,8 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
 for (const smpFeature of ['BBC SMP preview', 'SMP.subtitlesHref',
-                          'application/ttml+xml', "versionID:'p049sq7k'",
+                          'application/ttml+xml', "DEFAULT_SMP_MEDIA_ID='p049sq7k'",
+                          'id="smpMediaId"', 'video concealed',
                           "player.bind('mediaItemChanged'",
                           "player.bind('loadedmetadata'",
                           "player.bind('timeupdate'",
