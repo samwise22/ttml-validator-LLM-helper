@@ -31,6 +31,7 @@ const context = vm.createContext({
 vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues;', context);
 const validateButton = document.querySelector('#validateSource');
 if (!validateButton.disabled) throw new Error('Validate should initially be disabled.');
+document.querySelector('[data-method="paste"]').dispatchEvent(new window.Event('click'));
 document.querySelector('#pasteSource').value = '<tt></tt>';
 document.querySelector('#pasteSource').dispatchEvent(new window.Event('input'));
 if (!validateButton.disabled) throw new Error('Source alone should not enable validation.');
@@ -101,7 +102,12 @@ for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
 }
-for (const urlUi of ['id="mediaPid"', 'id="subtitleUrl"', 'Import subtitle URL',
+for (const sourceChoice of ['data-method="file"', 'data-method="paste"',
+                            'data-method="url"', 'data-method="extension"',
+                            'role="tablist"', 'role="tabpanel"']) {
+  if (!html.includes(sourceChoice)) throw new Error(`Missing progressive source choice: ${sourceChoice}`);
+}
+for (const urlUi of ['id="mediaPid"', 'id="subtitleUrl"', 'Paste a subtitle file URL',
                      'subtitleUrlStatus', 'Downloading subtitle XML',
                      'await fetch(url)', "sourceKind==='url'",
                      'previewMediaVersion=pid']) {
@@ -114,10 +120,12 @@ for (const extensionUi of ['Import via Chrome extension', 'id="extensionImport"'
   if (!html.includes(extensionUi)) throw new Error(`Missing Chrome-extension import UI: ${extensionUi}`);
 }
 const subtitleUrlInput = document.querySelector('#subtitleUrl');
+document.querySelector('[data-method="url"]').dispatchEvent(new window.Event('click'));
 subtitleUrlInput.value = 'https://vod-sub-uk.live.cf.md.bbci.co.uk/iplayer/subtitles/example.xml?Expires=1';
 subtitleUrlInput.dispatchEvent(new window.Event('input'));
 if (validateButton.disabled) throw new Error('A valid subtitle URL plus presentation should enable validation.');
 const extensionImport = document.querySelector('#extensionImport');
+document.querySelector('[data-method="extension"]').dispatchEvent(new window.Event('click'));
 extensionImport.value = 'BBC TTML IMPORT 1\nPID: p0nzvlc5\nSUBTITLE URL: https://vod-sub-uk.live.cf.md.bbci.co.uk/iplayer/subtitles/new.xml?Expires=2';
 extensionImport.dispatchEvent(new window.Event('input'));
 if (document.querySelector('#mediaPid').value !== 'p0nzvlc5' ||
