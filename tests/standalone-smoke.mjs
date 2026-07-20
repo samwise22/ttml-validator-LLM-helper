@@ -27,10 +27,17 @@ const context = vm.createContext({
   location: { reload() {} },
   setTimeout,
 });
-vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render;', context);
+vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues;', context);
 const bytes = new Uint8Array(fs.readFileSync(sourcePath));
 const text = new TextDecoder().decode(bytes);
 const findings = context.__validate(text, bytes, 'vertical');
+const cues = context.__previewCues(text);
+if (!cues.length || !cues.every(cue => cue.end > cue.begin && cue.lines.length)) {
+  throw new Error('Caption preview should contain valid timed cues.');
+}
+if (!cues.some(cue => cue.lines.length > 1)) {
+  throw new Error('Caption preview should preserve explicit TTML line breaks.');
+}
 // Linkedom does not preserve the default XML namespace exactly like a browser.
 // Remove that test-environment artefact before exercising report semantics.
 const findingsForRender = findings.filter(item => item.code !== 'xml_tt_namespace');
