@@ -54,17 +54,14 @@ if (rendered.includes('<details open><summary>Every affected location')) {
 if (!rendered.includes('target="_blank" rel="noopener noreferrer"')) {
   throw new Error('BBC guidance links should open safely in a new tab.');
 }
-if (!rendered.includes('class="overview-layout"') ||
-    !rendered.includes('id="previewHost"')) {
-  throw new Error('Interactive results should reserve a compact preview beside the overview.');
-}
 const staticReport = context.__render(
   { name: sourcePath.split('/').pop() }, 'vertical', findingsForRender, false,
 );
-if (staticReport.includes('id="previewHost"') || staticReport.includes('class="overview-layout"')) {
+if (staticReport.includes('id="previewHost"') || staticReport.includes('class="source-workspace"')) {
   throw new Error('Downloaded reports should not contain an empty interactive preview area.');
 }
-for (const requiredUi of ['source-editor', 'Run validation again', 'Restore original']) {
+for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
+                          'id="previewHost"', 'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
 if (!rendered.includes('Fails implemented compliance checks') ||
