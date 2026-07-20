@@ -31,7 +31,12 @@ vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group 
 const bytes = new Uint8Array(fs.readFileSync(sourcePath));
 const text = new TextDecoder().decode(bytes);
 const findings = context.__validate(text, bytes, 'vertical');
-const rendered = context.__render({ name: sourcePath.split('/').pop() }, 'vertical', findings);
+// Linkedom does not preserve the default XML namespace exactly like a browser.
+// Remove that test-environment artefact before exercising report semantics.
+const findingsForRender = findings.filter(item => item.code !== 'xml_tt_namespace');
+const rendered = context.__render(
+  { name: sourcePath.split('/').pop() }, 'vertical', findingsForRender,
+);
 if (!rendered.includes('<details open><summary>Example source context</summary>')) {
   throw new Error('Source context should be expanded by default.');
 }
@@ -40,6 +45,21 @@ if (rendered.includes('<details open><summary>Every affected location')) {
 }
 if (!rendered.includes('target="_blank" rel="noopener noreferrer"')) {
   throw new Error('BBC guidance links should open safely in a new tab.');
+}
+if (!rendered.includes('Fails implemented compliance checks') ||
+    !rendered.includes('Compliance error') || rendered.includes('Blocking error')) {
+  throw new Error('Validator errors should be described as compliance errors.');
+}
+if (sourcePath.includes('zztest_demo') &&
+    !rendered.includes('Playback outlook: compatibility is uncertain')) {
+  throw new Error('Structural failures should produce an uncertain playback outlook.');
+}
+const parseFailureReport = context.__render(
+  { name: 'malformed.xml' }, 'horizontal',
+  [{ status: 3, code: 'xml_parse', message: 'Could not parse XML', location: 'Unparsed file', node: null }],
+);
+if (!parseFailureReport.includes('Playback outlook: captions will not display')) {
+  throw new Error('XML parse failures should identify that captions will not display.');
 }
 const codes = new Set(findings.map(item => item.code));
 for (const expected of ['imsc_parameter_activeArea', 'ttml_metadata_copyright',
