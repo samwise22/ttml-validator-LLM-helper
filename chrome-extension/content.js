@@ -1,4 +1,6 @@
 const mediaSelectorPattern = /\/mediaselector\/.*?\/(?:vpid|cvid)\/([a-z0-9]{8})(?:\/|$)/i;
+let currentPageUrl = location.href;
+let pageStartedAt = 0;
 
 function subtitleUrl(url) {
   try {
@@ -14,7 +16,14 @@ function subtitleUrl(url) {
 }
 
 function scan() {
-  const resources = performance.getEntriesByType('resource').map(entry => entry.name);
+  if (location.href !== currentPageUrl) {
+    currentPageUrl = location.href;
+    pageStartedAt = performance.now();
+  }
+  const resources = performance.getEntriesByType('resource')
+    .filter(entry => entry.startTime >= pageStartedAt)
+    .map(entry => entry.name)
+    .reverse();
   const selectorUrl = resources.find(url => mediaSelectorPattern.test(url));
   const detectedSubtitleUrl = resources.find(subtitleUrl);
   const details = {};
@@ -30,7 +39,7 @@ function scan() {
   }
 
   if (details.pid || details.subtitleUrl) {
-    chrome.runtime.sendMessage({type: 'FOUND_DETAILS', details});
+    chrome.runtime.sendMessage({type: 'FOUND_DETAILS', pageUrl: location.href, details});
   }
 }
 

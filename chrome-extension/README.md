@@ -16,3 +16,6 @@ download or modify the subtitle file.
 Signed subtitle URLs expire. Copy and use the URL while it is current. If either
 field is missing, reload the BBC page after installing the extension, start the
 video with subtitles enabled, and open the extension again.
+
+After updating an unpacked copy, select **Reload** on its `chrome://extensions`
+card before testing the new version.

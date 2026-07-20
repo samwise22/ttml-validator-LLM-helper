@@ -13,7 +13,7 @@ async function load() {
     await chrome.tabs.sendMessage(tab.id, {type: 'SCAN_NOW'});
   } catch {}
   await new Promise(resolve => setTimeout(resolve, 120));
-  const details = await chrome.runtime.sendMessage({type: 'GET_DETAILS', tabId: tab.id});
+  const details = await chrome.runtime.sendMessage({type: 'GET_DETAILS', tabId: tab.id, pageUrl: tab.url});
   pid.value = details.pid || '';
   subtitleUrl.value = details.subtitleUrl || '';
   if (details.pid && details.subtitleUrl) {
