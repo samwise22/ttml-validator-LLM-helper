@@ -79,8 +79,10 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
 for (const smpFeature of ['BBC SMP preview', 'SMP.subtitlesHref',
-                          'application/ttml+xml', "DEFAULT_SMP_MEDIA_ID='p049sq7k'",
+                          'application/ttml+xml', "DEFAULT_SMP_MEDIA_ID='m002z5r2'",
                           'id="smpMediaId"', 'video concealed',
+                          'id="smpSubtitleTimeline"', 'Subtitle range',
+                          'startTime:Math.max(0,subtitleStart-.25)',
                           "player.bind('mediaItemChanged'",
                           "player.bind('loadedmetadata'",
                           "player.bind('timeupdate'",
