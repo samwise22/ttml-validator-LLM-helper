@@ -78,6 +78,11 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
                           'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
+for (const smpFeature of ['BBC SMP preview', 'SMP.subtitlesHref',
+                          'application/ttml+xml', "versionID:'p049sq7k'",
+                          'mountLocalPreview(panel,text,mode)']) {
+  if (!html.includes(smpFeature)) throw new Error(`Missing guarded SMP preview feature: ${smpFeature}`);
+}
 for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'pasted-subtitles.ttml', 'id="validateSource"',
                        'Choose the intended presentation', 'Validate TTML']) {
