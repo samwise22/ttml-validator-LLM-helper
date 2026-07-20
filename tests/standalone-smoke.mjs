@@ -101,15 +101,29 @@ for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
 }
-for (const urlUi of ['id="subtitleUrl"', 'Import subtitle URL',
+for (const urlUi of ['id="mediaPid"', 'id="subtitleUrl"', 'Import subtitle URL',
                      'subtitleUrlStatus', 'Downloading subtitle XML',
-                     'await fetch(url)', "sourceKind==='url'"]) {
+                     'await fetch(url)', "sourceKind==='url'",
+                     'previewMediaVersion=pid']) {
   if (!html.includes(urlUi)) throw new Error(`Missing subtitle-URL route: ${urlUi}`);
+}
+for (const extensionUi of ['Import via Chrome extension', 'id="extensionImport"',
+                           'Learn how to use this', 'id="extensionHelp"',
+                           'chrome-extension.zip', 'Copy both for validator',
+                           'SUBTITLE URL:']) {
+  if (!html.includes(extensionUi)) throw new Error(`Missing Chrome-extension import UI: ${extensionUi}`);
 }
 const subtitleUrlInput = document.querySelector('#subtitleUrl');
 subtitleUrlInput.value = 'https://vod-sub-uk.live.cf.md.bbci.co.uk/iplayer/subtitles/example.xml?Expires=1';
 subtitleUrlInput.dispatchEvent(new window.Event('input'));
 if (validateButton.disabled) throw new Error('A valid subtitle URL plus presentation should enable validation.');
+const extensionImport = document.querySelector('#extensionImport');
+extensionImport.value = 'BBC TTML IMPORT 1\nPID: p0nzvlc5\nSUBTITLE URL: https://vod-sub-uk.live.cf.md.bbci.co.uk/iplayer/subtitles/new.xml?Expires=2';
+extensionImport.dispatchEvent(new window.Event('input'));
+if (document.querySelector('#mediaPid').value !== 'p0nzvlc5' ||
+    subtitleUrlInput.value.includes('example.xml')) {
+  throw new Error('Combined extension paste should populate PID and subtitle URL fields.');
+}
 if (!html.includes('id="validateSource" type="button" disabled')) {
   throw new Error('Validate TTML should start disabled until source and presentation are supplied.');
 }

@@ -1,6 +1,7 @@
 const pid = document.querySelector('#pid');
 const subtitleUrl = document.querySelector('#subtitleUrl');
 const status = document.querySelector('#status');
+const copyBoth = document.querySelector('#copyBoth');
 
 async function load() {
   const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
@@ -32,6 +33,7 @@ function disableEmptyCopyButtons() {
   document.querySelectorAll('[data-copy]').forEach(button => {
     button.disabled = !document.querySelector(`#${button.dataset.copy}`).value;
   });
+  copyBoth.disabled = !(pid.value && subtitleUrl.value);
 }
 
 document.querySelectorAll('[data-copy]').forEach(button => {
@@ -42,6 +44,12 @@ document.querySelectorAll('[data-copy]').forEach(button => {
     button.textContent = 'Copied';
     setTimeout(() => { button.textContent = original; }, 1000);
   });
+});
+
+copyBoth.addEventListener('click', async () => {
+  await navigator.clipboard.writeText(`BBC TTML IMPORT 1\nPID: ${pid.value}\nSUBTITLE URL: ${subtitleUrl.value}`);
+  copyBoth.textContent = 'Copied both';
+  setTimeout(() => { copyBoth.textContent = 'Copy both for validator'; }, 1000);
 });
 
 load();

@@ -4,6 +4,10 @@ This unpacked Manifest V3 extension observes BBC player requests and presents th
 playable media PID and signed subtitle XML URL in copyable fields. It does not
 download or modify the subtitle file.
 
+**Copy both for validator** writes a three-line import block containing both
+values. Paste that block into the standalone validator's **Import via Chrome
+extension** field to populate its PID and subtitle URL inputs together.
+
 ## Install for testing
 
 1. Open `chrome://extensions` in Chrome.
