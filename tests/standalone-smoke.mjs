@@ -64,9 +64,14 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
                           'id="previewHost"', 'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
-for (const pasteUi of ['id="pasteSource"', 'id="pasteName"',
-                       'pasted-subtitles.ttml', 'Review pasted TTML']) {
+for (const pasteUi of ['id="pasteSource"', 'id="sourceStatus"',
+                       'pasted-subtitles.ttml', 'id="validateSource"',
+                       'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
+}
+if (html.includes('id="pasteName"') || html.includes('id="reviewPaste"') ||
+    html.includes('class="primary" id="choose"')) {
+  throw new Error('The start journey should have one primary validation action and no pasted filename field.');
 }
 if (!rendered.includes('Fails implemented compliance checks') ||
     !rendered.includes('Compliance error') || rendered.includes('Blocking error')) {
