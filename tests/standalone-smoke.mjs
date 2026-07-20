@@ -29,6 +29,15 @@ const context = vm.createContext({
   setTimeout,
 });
 vm.runInContext(script + ';globalThis.__validate = validate; globalThis.__group = groupFindings; globalThis.__render = render; globalThis.__previewCues = previewCues;', context);
+const validateButton = document.querySelector('#validateSource');
+if (!validateButton.disabled) throw new Error('Validate should initially be disabled.');
+document.querySelector('#pasteSource').value = '<tt></tt>';
+document.querySelector('#pasteSource').dispatchEvent(new window.Event('input'));
+if (!validateButton.disabled) throw new Error('Source alone should not enable validation.');
+const horizontal = document.querySelector('input[value="horizontal"]');
+horizontal.checked = true;
+horizontal.dispatchEvent(new window.Event('change'));
+if (validateButton.disabled) throw new Error('Source plus presentation should enable validation.');
 const bytes = new Uint8Array(fs.readFileSync(sourcePath));
 const text = new TextDecoder().decode(bytes);
 const findings = context.__validate(text, bytes, 'vertical');
@@ -64,13 +73,21 @@ if (staticReport.includes('id="previewHost"') || staticReport.includes('class="s
   throw new Error('Downloaded reports should not contain an empty interactive preview area.');
 }
 for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
-                          'id="previewHost"', 'Run validation again', 'Restore original']) {
+                          'source-highlight xml-code', 'id="previewHost"',
+                          'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
-for (const pasteUi of ['id="pasteSource"', 'id="sourceStatus"',
+for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'pasted-subtitles.ttml', 'id="validateSource"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
+}
+if (!html.includes('id="validateSource" type="button" disabled')) {
+  throw new Error('Validate TTML should start disabled until source and presentation are supplied.');
+}
+if (!script.includes("sourceKind==='file'?fileText:pasteSource.value") ||
+    script.includes('pasteSource.value=await file.text()')) {
+  throw new Error('Loaded files should remain separate from the paste box.');
 }
 if (html.includes('id="pasteName"') || html.includes('id="reviewPaste"') ||
     html.includes('class="primary" id="choose"')) {
