@@ -28,7 +28,9 @@ audit.
 
 The optional [BBC Subtitle Details Chrome extension](chrome-extension/README.md)
 captures the playable PID and signed subtitle XML request used by a BBC video
-page and presents both values in copyable fields.
+page and presents both values in copyable fields. The subtitle URL can be pasted
+directly into the standalone validator as an alternative to choosing a local file
+or pasting TTML source. Signed URLs must be used before they expire.
 
 ## Run the application
 

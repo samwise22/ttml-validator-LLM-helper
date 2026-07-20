@@ -101,6 +101,15 @@ for (const pasteUi of ['id="pasteSource"', 'id="fileStatus"',
                        'Choose the intended presentation', 'Validate TTML']) {
   if (!html.includes(pasteUi)) throw new Error(`Missing pasted-TTML route: ${pasteUi}`);
 }
+for (const urlUi of ['id="subtitleUrl"', 'Import subtitle URL',
+                     'subtitleUrlStatus', 'Downloading subtitle XML',
+                     'await fetch(url)', "sourceKind==='url'"]) {
+  if (!html.includes(urlUi)) throw new Error(`Missing subtitle-URL route: ${urlUi}`);
+}
+const subtitleUrlInput = document.querySelector('#subtitleUrl');
+subtitleUrlInput.value = 'https://vod-sub-uk.live.cf.md.bbci.co.uk/iplayer/subtitles/example.xml?Expires=1';
+subtitleUrlInput.dispatchEvent(new window.Event('input'));
+if (validateButton.disabled) throw new Error('A valid subtitle URL plus presentation should enable validation.');
 if (!html.includes('id="validateSource" type="button" disabled')) {
   throw new Error('Validate TTML should start disabled until source and presentation are supplied.');
 }
