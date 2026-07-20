@@ -78,9 +78,13 @@ for (const requiredUi of ['<details open>', 'source-workspace', 'source-editor',
                           'Run validation again', 'Restore original']) {
   if (!html.includes(requiredUi)) throw new Error(`Missing editable-source UI: ${requiredUi}`);
 }
-for (const smpFeature of ['BBC SMP preview', 'SMP.subtitlesHref',
+for (const smpFeature of ['<h3>Caption preview</h3>', 'SMP.subtitlesHref',
                           'application/ttml+xml', "DEFAULT_SMP_MEDIA_ID='m002z5r2'",
-                          'id="smpMediaId"', 'video concealed',
+                          "previewMediaEnvironment='test'",
+                          'id="smpPid"', 'placeholder="Enter a valid PID"',
+                          'Media: ${isSample?\'Sample\':esc(mediaVersion)}',
+                          "host:environment==='test'?'open.test.bbc.co.uk':'open.live.bbc.co.uk'",
+                          'value="test"', 'value="live"',
                           'id="smpSubtitleTimeline"', 'Subtitle range',
                           'startTime:Math.max(0,subtitleStart-.25)',
                           'autoplay:false,muted:true',
@@ -103,7 +107,7 @@ if (!script.includes("sourceKind==='file'?fileText:pasteSource.value") ||
   throw new Error('Loaded files should remain separate from the paste box.');
 }
 if (html.includes('id="pasteName"') || html.includes('id="reviewPaste"') ||
-    html.includes('class="primary" id="choose"')) {
+    html.includes('class="primary" id="choose"') || html.includes('id="smpMediaId"')) {
   throw new Error('The start journey should have one primary validation action and no pasted filename field.');
 }
 if (!rendered.includes('Fails implemented compliance checks') ||
