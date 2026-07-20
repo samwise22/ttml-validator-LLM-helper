@@ -13,6 +13,15 @@ function isSubtitleUrl(url) {
   }
 }
 
+function pidFromSubtitleUrl(url) {
+  try {
+    const filename = new URL(url).pathname.split('/').pop() || '';
+    return filename.match(/^([a-z0-9]{8})(?:-|\.xml$)/i)?.[1]?.toLowerCase() || '';
+  } catch {
+    return '';
+  }
+}
+
 function normalisePageUrl(value) {
   try {
     const url = new URL(value);
@@ -40,7 +49,10 @@ chrome.webRequest.onBeforeRequest.addListener(
     const pid = details.url.match(mediaSelectorPattern)?.[1]?.toLowerCase();
     const found = {};
     if (pid) found.pid = pid;
-    if (isSubtitleUrl(details.url)) found.subtitleUrl = details.url;
+    if (isSubtitleUrl(details.url)) {
+      found.subtitleUrl = details.url;
+      found.pid ||= pidFromSubtitleUrl(details.url);
+    }
     if (found.pid || found.subtitleUrl) {
       mergeTabDetails(details.tabId, found, details.documentUrl || details.initiator);
     }

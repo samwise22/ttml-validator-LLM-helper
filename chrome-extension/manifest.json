@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BBC Subtitle Details",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Find the playable media PID and TTML subtitle URL used by a BBC page.",
   "permissions": ["storage", "tabs", "webRequest", "clipboardWrite"],
   "host_permissions": [

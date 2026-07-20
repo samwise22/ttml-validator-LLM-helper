@@ -15,6 +15,15 @@ function subtitleUrl(url) {
   }
 }
 
+function pidFromSubtitleUrl(url) {
+  try {
+    const filename = new URL(url).pathname.split('/').pop() || '';
+    return filename.match(/^([a-z0-9]{8})(?:-|\.xml$)/i)?.[1]?.toLowerCase() || '';
+  } catch {
+    return '';
+  }
+}
+
 function scan() {
   if (location.href !== currentPageUrl) {
     currentPageUrl = location.href;
@@ -29,7 +38,10 @@ function scan() {
   const details = {};
   const requestPid = selectorUrl?.match(mediaSelectorPattern)?.[1];
   if (requestPid) details.pid = requestPid.toLowerCase();
-  if (detectedSubtitleUrl) details.subtitleUrl = detectedSubtitleUrl;
+  if (detectedSubtitleUrl) {
+    details.subtitleUrl = detectedSubtitleUrl;
+    details.pid ||= pidFromSubtitleUrl(detectedSubtitleUrl);
+  }
 
   if (!details.pid) {
     const scripts = [...document.scripts].map(script => script.textContent || '').join('\n');

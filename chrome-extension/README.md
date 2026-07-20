@@ -8,6 +8,11 @@ download or modify the subtitle file.
 values. Paste that block into the standalone validator's **Import via Chrome
 extension** field to populate its PID and subtitle URL inputs together.
 
+For homepage overlays and other experiences without a video-specific page URL,
+the extension derives the PID from BBC subtitle filenames such as
+`p0nz8v4q-….xml`. A new subtitle request replaces the previous capture even when
+the browser remains on the same root URL.
+
 ## Install for testing
 
 1. Open `chrome://extensions` in Chrome.
