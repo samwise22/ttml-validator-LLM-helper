@@ -18,12 +18,11 @@ area and every unimplemented area so absence of a finding cannot be mistaken for
 a full validation pass. Parity with the Python validator shall be demonstrated
 with shared fixtures before the Docker implementation is deprecated.
 
-When served with the companion API, the PoC can also accept a BBC News or iPlayer
-page URL. The API extracts the page's version PID, asks BBC Media Selector for the
-associated caption resource, downloads the TTML, and returns it to the same
-browser validation flow. Direct file and pasted-source routes remain independent
-of the API. Run the Docker application and open
-[http://localhost:8080/standalone](http://localhost:8080/standalone) to test it.
+When the same HTML file is served from `https://www.bbc.co.uk`, it can import a
+BBC News or iPlayer page directly. The browser reads same-origin page metadata,
+uses BBC Media Selector's JavaScript callback response to find the HTTPS caption
+resource, and downloads the CORS-enabled TTML. This route remains entirely
+client-side; it does not use the Docker application or a repository API.
 
 Standalone counts distinguish **issue types** from **affected locations**.
 Repeated occurrences of the same severity, code and message are consolidated in
