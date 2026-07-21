@@ -24,6 +24,21 @@ function pidFromSubtitleUrl(url) {
   }
 }
 
+function sendDetails(details) {
+  try {
+    const pending = chrome.runtime.sendMessage({
+      type: 'FOUND_DETAILS',
+      pageUrl: location.href,
+      details,
+    });
+    if (pending && typeof pending.catch === 'function') pending.catch(() => {});
+  } catch {
+    // An already-open page can retain this script after the extension is
+    // reloaded. Chrome invalidates that old extension context; a page reload
+    // installs the current script, so there is nothing useful to report here.
+  }
+}
+
 function scan() {
   if (location.href !== currentPageUrl) {
     currentPageUrl = location.href;
@@ -51,7 +66,7 @@ function scan() {
   }
 
   if (details.pid || details.subtitleUrl) {
-    chrome.runtime.sendMessage({type: 'FOUND_DETAILS', pageUrl: location.href, details});
+    sendDetails(details);
   }
 }
 

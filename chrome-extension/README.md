@@ -27,4 +27,4 @@ field is missing, reload the BBC page after installing the extension, start the
 video with subtitles enabled, and open the extension again.
 
 After updating an unpacked copy, select **Reload** on its `chrome://extensions`
-card before testing the new version.
+card, then reload any already-open BBC pages before testing the new version.
